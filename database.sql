@@ -1,4 +1,4 @@
-CREATE DATABASE shared_list;
+-- CREATE DATABASE shared_list;
 
 CREATE TABLE list_item(
   item_id SERIAL,
