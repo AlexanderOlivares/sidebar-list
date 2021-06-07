@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-///howw????
-// import "./index.css";
 import {
   BrowserRouter as Router,
   Switch,
