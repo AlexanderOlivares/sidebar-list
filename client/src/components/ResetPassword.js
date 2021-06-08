@@ -28,12 +28,15 @@ export default function ResetPassword() {
 
   const validateToken = async () => {
     try {
-      const response = await fetch(`/resetpassword/${id}/${token}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/resetpassword/${id}/${token}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const validToken = await response.json();
       if (validToken) {
         setRender(true);
@@ -73,13 +76,16 @@ export default function ResetPassword() {
       return;
     }
     try {
-      const updatePassword = await fetch(`/resetpassword/${id}/${token}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const updatePassword = await fetch(
+        `http://localhost:5000/resetpassword/${id}/${token}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
       const response = await updatePassword.json();
       if (response) {
         toast.success("Password updated. Please log in.");

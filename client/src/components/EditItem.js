@@ -12,7 +12,7 @@ export default function EditItem({ item, setItemWasChanged }) {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("token", localStorage.token);
 
-      await fetch(`/dashboard/items/${id}`, {
+      await fetch(`http://localhost:5000/dashboard/items/${id}`, {
         method: "PUT",
         headers: myHeaders,
         body: JSON.stringify(body),

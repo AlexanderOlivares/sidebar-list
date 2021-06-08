@@ -40,7 +40,7 @@ router.post("/register/", validInfo, async (req, res) => {
     res.json({ token });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error -register");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -132,7 +132,7 @@ router.post("/login", validInfo, async (req, res) => {
     );
     res.json({ token });
   } catch (err) {
-    res.status(500).send("Server Error :( -login");
+    res.status(500).send("Server Error");
     console.error(err.message);
   }
 });
@@ -141,7 +141,7 @@ router.get("/is-verified", authorization, async (req, res) => {
   try {
     res.json(true);
   } catch (err) {
-    res.status(500).send("Server Error -isverified");
+    res.status(500).send("Server Error");
     console.error(err.message);
   }
 });
