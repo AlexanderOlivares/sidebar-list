@@ -74,6 +74,9 @@ export default function Dashboard({ setAuth }) {
 
   useEffect(() => {
     getUsernameAndEmail();
+  }, []);
+
+  useEffect(() => {
     getListItems();
     setItemWasChanged(false);
   }, [itemWasChanged]);
@@ -96,16 +99,14 @@ export default function Dashboard({ setAuth }) {
     return nameStr.trim().replace(/\s/g, "-");
   };
 
-  const sendInviteEditorEmail = async e => {
-    e.preventDefault();
-
+  const sendInviteEditorEmail = () => {
     const { name: editors_name, email: editors } = modalInput;
 
     let creator = btoa(creatorEmail);
     let creatorNameNoDash = name;
     let creatorName = joinNameWithDash(name);
 
-    // body obj is used for email params and put request
+    // body obj is used for email params and returned for put request
     const body = {
       creatorNameNoDash,
       creatorName,
@@ -114,38 +115,45 @@ export default function Dashboard({ setAuth }) {
       editors,
     };
 
-    let emailWasSent = false;
-
     emailjs
       .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
       .then(result => {
         console.log(result.text);
-        emailWasSent = true;
         toast.success("Invitation email was sent.");
         setGuestName(editors_name);
+        return body;
       })
       .catch(() => {
         toast.error(
           "Error could not send invite email. Please double check you have the correct address."
         );
+        return false;
       });
+  };
 
-    if (emailWasSent) {
-      try {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("token", localStorage.token);
+  const giveEditorAccess = async e => {
+    e.preventDefault();
+    console.log("email was sent :)");
+    const emailWasSent = await sendInviteEditorEmail();
+    if (!emailWasSent) {
+      return;
+    }
+    let body = emailWasSent;
 
-        await fetch(`http://localhost:5000/dashboard/invite`, {
-          method: "PUT",
-          headers: myHeaders,
-          body: JSON.stringify(body),
-        });
-      } catch (err) {
-        console.error(err.message);
-        toast.error("Error could not add editor. Please try again.");
-        setGuestName(null);
-      }
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("token", localStorage.token);
+
+      await fetch(`http://localhost:5000/dashboard/invite`, {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      console.error(err.message);
+      toast.error("Error could not add editor. Please try again.");
+      setGuestName(null);
     }
   };
 
@@ -233,7 +241,7 @@ export default function Dashboard({ setAuth }) {
                   </button>
                   <button
                     type="submit"
-                    onClick={sendInviteEditorEmail}
+                    onClick={giveEditorAccess}
                     className="btn btn-primary"
                     data-dismiss="modal"
                   >
