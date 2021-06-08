@@ -120,8 +120,8 @@ export default function Dashboard({ setAuth }) {
       .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
       .then(result => {
         console.log(result.text);
-        toast.success("Invitation email was sent.");
         emailWasSent = true;
+        toast.success("Invitation email was sent.");
         setGuestName(editors_name);
       })
       .catch(() => {

@@ -51,7 +51,7 @@ app.post("/request-password-reset", async (req, res) => {
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-    const link = `http://localhost:3000/reset-password/${userid}/${token}`;
+    const link = `https://sidebar-list.herokuapp.com/reset-password/${userid}/${token}`;
 
     res.json([user.rows, link]);
   } catch (err) {

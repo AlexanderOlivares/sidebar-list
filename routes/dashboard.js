@@ -101,7 +101,7 @@ router.put("/invite", authorization, async (req, res) => {
       [editors, editors_name, creator]
     );
 
-    res.json(`${editors_name} can now make edits`);
+    res.json("editor added");
   } catch (err) {
     console.error(err.message);
   }
