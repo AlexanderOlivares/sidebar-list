@@ -38,16 +38,13 @@ export default function Login({ setAuth }) {
         emailOfResetUser,
       };
 
-      const existingAccount = await fetch(
-        `http://localhost:5000/request-password-reset`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      const existingAccount = await fetch(`/request-password-reset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
 
       const accountExists = await existingAccount.json();
 
@@ -104,7 +101,7 @@ export default function Login({ setAuth }) {
     e.preventDefault();
     try {
       const body = { email, password };
-      const response = await fetch(`http://localhost:5000/auth/login`, {
+      const response = await fetch(`/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

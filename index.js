@@ -51,6 +51,7 @@ app.post("/request-password-reset", async (req, res) => {
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "15m" });
+    // need to update this link to heroku domain
     const link = `http://localhost:3000/reset-password/${userid}/${token}`;
 
     res.json([user.rows, link]);

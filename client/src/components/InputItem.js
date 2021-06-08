@@ -15,7 +15,7 @@ export default function InputItem({ name, guestName, setItemWasChanged }) {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("token", localStorage.token);
 
-      await fetch("http://localhost:5000/dashboard/items", {
+      await fetch("/dashboard/items", {
         method: "POST",
         headers: myHeaders,
         body: JSON.stringify(body),

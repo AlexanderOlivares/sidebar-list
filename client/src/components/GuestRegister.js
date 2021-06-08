@@ -43,7 +43,7 @@ export default function GuestRegister({ setAuth }) {
     try {
       const body = { email, name, password, guestsemail, guestsname };
       const response = await fetch(
-        `http://localhost:5000/auth/guest-register/${guestsemail}/${guestsname}`,
+        `/auth/guest-register/${guestsemail}/${guestsname}`,
         {
           method: "POST",
           headers: {
