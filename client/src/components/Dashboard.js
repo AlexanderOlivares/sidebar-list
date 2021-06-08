@@ -98,51 +98,54 @@ export default function Dashboard({ setAuth }) {
 
   const sendInviteEditorEmail = async e => {
     e.preventDefault();
-    try {
-      const { name: editors_name, email: editors } = modalInput;
 
-      let creator = btoa(creatorEmail);
-      let creatorNameNoDash = name;
-      let creatorName = joinNameWithDash(name);
+    const { name: editors_name, email: editors } = modalInput;
 
-      // body obj is used for email params and put request
-      const body = {
-        creatorNameNoDash,
-        creatorName,
-        creator,
-        editors_name,
-        editors,
-      };
+    let creator = btoa(creatorEmail);
+    let creatorNameNoDash = name;
+    let creatorName = joinNameWithDash(name);
 
-      emailjs
-        .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
-        .then(
-          result => {
-            console.log(result.text);
-            toast.success("Invitation email was sent.");
-          },
-          error => {
-            console.log(error.text);
-            toast.error(
-              "Error could not send invite email. Please double check you have the correct address."
-            );
-          }
+    // body obj is used for email params and put request
+    const body = {
+      creatorNameNoDash,
+      creatorName,
+      creator,
+      editors_name,
+      editors,
+    };
+
+    let emailWasSent = false;
+
+    emailjs
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
+      .then(result => {
+        console.log(result.text);
+        toast.success("Invitation email was sent.");
+        emailWasSent = true;
+        setGuestName(editors_name);
+      })
+      .catch(() => {
+        toast.error(
+          "Error could not send invite email. Please double check you have the correct address."
         );
-
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("token", localStorage.token);
-
-      await fetch(`http://localhost:5000/dashboard/invite`, {
-        method: "PUT",
-        headers: myHeaders,
-        body: JSON.stringify(body),
       });
 
-      setGuestName(editors_name);
-    } catch (err) {
-      console.error(err.message);
-      toast.error("Error could not send invite. Please try again.");
+    if (emailWasSent) {
+      try {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("token", localStorage.token);
+
+        await fetch(`http://localhost:5000/dashboard/invite`, {
+          method: "PUT",
+          headers: myHeaders,
+          body: JSON.stringify(body),
+        });
+      } catch (err) {
+        console.error(err.message);
+        toast.error("Error could not add editor. Please try again.");
+        setGuestName(null);
+      }
     }
   };
 

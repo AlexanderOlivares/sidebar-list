@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { phrson-check} from "boostrap-icons"
 
 export default function InputItem({ name, guestName, setItemWasChanged }) {
   const [description, setDescription] = useState("");
