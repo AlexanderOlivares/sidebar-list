@@ -4,11 +4,6 @@ html {
 
 body {
   min-height: 100%;
-  /* backdrop-filter: opacity(100%); */
-  /* background-repeat: "no-repeat";
-  background-size: "cover";
-  background-position: "center";
-  background-image: url(./assets/bg2.jpeg); */
 }
 
 .styles {
@@ -16,11 +11,9 @@ body {
   background-repeat: "no-repeat";
   background-size: "cover";
   background-position: "center";
-  /* background-image: url(./assets/bg5.jpeg); */
 }
 
 .jumbotron {
-  /* height: 100vh; */
   opacity: 1;
 }
 
