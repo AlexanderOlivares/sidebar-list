@@ -31,6 +31,9 @@ export default function Dashboard({ setAuth }) {
     name: "",
     email: "",
   });
+  // body is a bridge for email content data
+  // between giveEditorAcess and sendInviteEditorEmail
+  let body;
 
   async function getListItems() {
     try {
@@ -106,8 +109,7 @@ export default function Dashboard({ setAuth }) {
     let creatorNameNoDash = name;
     let creatorName = joinNameWithDash(name);
 
-    // body obj is used for email params and returned for put request
-    const body = {
+    const emailContent = {
       creatorNameNoDash,
       creatorName,
       creator,
@@ -115,13 +117,22 @@ export default function Dashboard({ setAuth }) {
       editors,
     };
 
+    // so we have emailContent data available for
+    // PUT request at giveEditor Access
+    body = emailContent;
+
     emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, body, EMAILJS_USER_ID)
+      .send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        emailContent,
+        EMAILJS_USER_ID
+      )
       .then(result => {
         console.log(result.text);
         toast.success("Invitation email was sent.");
         setGuestName(editors_name);
-        return body;
+        return true;
       })
       .catch(() => {
         toast.error(
@@ -133,12 +144,10 @@ export default function Dashboard({ setAuth }) {
 
   const giveEditorAccess = async e => {
     e.preventDefault();
-    console.log("email was sent :)");
-    const emailWasSent = await sendInviteEditorEmail();
+    const emailWasSent = sendInviteEditorEmail();
     if (!emailWasSent) {
       return;
     }
-    let body = emailWasSent;
 
     try {
       const myHeaders = new Headers();
