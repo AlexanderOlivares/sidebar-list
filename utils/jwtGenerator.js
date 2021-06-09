@@ -19,7 +19,6 @@ function jwtGenerator(
     },
   };
 
-  console.log(payload);
   return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1hr" });
 }
 
