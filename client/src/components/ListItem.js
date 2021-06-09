@@ -11,7 +11,7 @@ export default function ListItem({ allItems, setItemWasChanged }) {
 
   async function deleteListItem(id) {
     try {
-      await fetch(`http://localhost:5000/dashboard/items/${id}`, {
+      await fetch(`/dashboard/items/${id}`, {
         method: "DELETE",
         headers: { token: localStorage.token },
       });

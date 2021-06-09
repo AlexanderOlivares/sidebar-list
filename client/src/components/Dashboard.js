@@ -34,7 +34,7 @@ export default function Dashboard({ setAuth }) {
 
   async function getListItems() {
     try {
-      const response = await fetch(`http://localhost:5000/dashboard/`, {
+      const response = await fetch(`/dashboard/`, {
         method: "GET",
         headers: {
           token: localStorage.token,
@@ -51,15 +51,12 @@ export default function Dashboard({ setAuth }) {
 
   async function getUsernameAndEmail() {
     try {
-      const response = await fetch(
-        `http://localhost:5000/dashboard/name-email`,
-        {
-          method: "GET",
-          headers: {
-            token: localStorage.token,
-          },
-        }
-      );
+      const response = await fetch(`/dashboard/name-email`, {
+        method: "GET",
+        headers: {
+          token: localStorage.token,
+        },
+      });
 
       const parseRes = await response.json();
 
@@ -132,7 +129,7 @@ export default function Dashboard({ setAuth }) {
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("token", localStorage.token);
 
-        fetch(`http://localhost:5000/dashboard/invite`, {
+        fetch(`/dashboard/invite`, {
           method: "PUT",
           headers: myHeaders,
           body: JSON.stringify(emailContent),
