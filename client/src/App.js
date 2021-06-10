@@ -22,7 +22,7 @@ function App() {
   async function isAuth() {
     try {
       const response = await fetch(`/auth/is-verified`, {
-        method: "POST",
+        method: "GET",
         headers: { token: localStorage.token },
       });
       const parseRes = await response.json();

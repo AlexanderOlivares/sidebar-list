@@ -34,7 +34,7 @@ export default function Dashboard({ setAuth }) {
 
   async function getListItems() {
     try {
-      const response = await fetch(`/dashboard/`, {
+      const response = await fetch(`/dashboard`, {
         method: "GET",
         headers: {
           token: localStorage.token,
