@@ -51,7 +51,7 @@ function App() {
               !isAuthenticated ? (
                 <Landing {...props} />
               ) : (
-                <Dashboard {...props} setAuth={setAuth} />
+                <Redirect to="/dashboard" />
               )
             }
           ></Route>
@@ -73,7 +73,7 @@ function App() {
               !isAuthenticated ? (
                 <Register {...props} setAuth={setAuth} />
               ) : (
-                <Redirect to="/login" />
+                <Redirect to="/dashboard" />
               )
             }
           ></Route>
@@ -82,7 +82,7 @@ function App() {
             path="/dashboard"
             render={props =>
               !isAuthenticated ? (
-                <Redirect to="/login" />
+                <Redirect to="/" />
               ) : (
                 <Dashboard {...props} setAuth={setAuth} />
               )
