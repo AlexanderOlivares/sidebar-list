@@ -137,11 +137,11 @@ router.post("/login", validInfo, async (req, res) => {
   }
 });
 
-router.get("/is-verified", authorization, async (req, res) => {
+router.post("/is-verified", authorization, async (req, res) => {
   try {
     res.json(true);
   } catch (err) {
-    res.status(500).send("Server Error");
+    res.status(500).json("Server Error");
     console.error(err.message);
   }
 });
