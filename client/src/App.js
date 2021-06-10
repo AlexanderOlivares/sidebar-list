@@ -51,7 +51,7 @@ function App() {
               !isAuthenticated ? (
                 <Landing {...props} />
               ) : (
-                <Redirect to="/dashboard" />
+                <Redirect to="/list" />
               )
             }
           ></Route>
@@ -62,7 +62,7 @@ function App() {
               !isAuthenticated ? (
                 <Login {...props} setAuth={setAuth} />
               ) : (
-                <Redirect to="/dashboard" />
+                <Redirect to="/list" />
               )
             }
           ></Route>
@@ -73,18 +73,18 @@ function App() {
               !isAuthenticated ? (
                 <Register {...props} setAuth={setAuth} />
               ) : (
-                <Redirect to="/dashboard" />
+                <Redirect to="/list" />
               )
             }
           ></Route>
           <Route
             exact
-            path="/dashboard"
+            path="/list"
             render={props =>
-              !isAuthenticated ? (
-                <Redirect to="/" />
-              ) : (
+              isAuthenticated ? (
                 <Dashboard {...props} setAuth={setAuth} />
+              ) : (
+                <Redirect to="/" />
               )
             }
           ></Route>
@@ -95,7 +95,7 @@ function App() {
               !isAuthenticated ? (
                 <GuestRegister {...props} setAuth={setAuth} />
               ) : (
-                <Redirect to="/dashboard" />
+                <Redirect to="/list" />
               )
             }
           ></Route>
@@ -106,7 +106,7 @@ function App() {
               !isAuthenticated ? (
                 <ResetPassword {...props} setAuth={setAuth} />
               ) : (
-                <Redirect to="/dashboard" />
+                <Redirect to="/list" />
               )
             }
           ></Route>

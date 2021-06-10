@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function InputItem({ name, guestName, setItemWasChanged }) {
   const [description, setDescription] = useState("");
@@ -7,6 +8,11 @@ export default function InputItem({ name, guestName, setItemWasChanged }) {
 
   const handleFormSubmit = async e => {
     e.preventDefault();
+    if (description === "") {
+      toast.error("Your list item is empty.");
+      return;
+    }
+
     try {
       const body = { description };
 
