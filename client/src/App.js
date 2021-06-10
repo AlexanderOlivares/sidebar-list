@@ -81,10 +81,10 @@ function App() {
             exact
             path="/dashboard"
             render={props =>
-              isAuthenticated ? (
-                <Dashboard {...props} setAuth={setAuth} />
-              ) : (
+              !isAuthenticated ? (
                 <Redirect to="/login" />
+              ) : (
+                <Dashboard {...props} setAuth={setAuth} />
               )
             }
           ></Route>
