@@ -19,7 +19,9 @@ function jwtGenerator(
     },
   };
 
-  return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1hr" });
+  return jwt.sign(payload, process.env.jwtSecret, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 }
 
 module.exports = jwtGenerator;

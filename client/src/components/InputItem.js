@@ -6,6 +6,7 @@ export default function InputItem({ name, guestName, setItemWasChanged }) {
 
   const handleUserInput = e => setDescription(e.target.value);
 
+  // Post new item to list
   const handleFormSubmit = async e => {
     e.preventDefault();
     if (description === "") {
