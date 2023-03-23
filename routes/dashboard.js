@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const pool = require("../db");
 const authorization = require("../middleware/authorization");
+const sendInviteEmail = require("../utils/nodemailer");
 
 // all items
 router.get("/", authorization, async (req, res) => {
@@ -91,17 +92,24 @@ router.delete("/items/:id", authorization, async (req, res) => {
 });
 
 router.put("/invite", authorization, async (req, res) => {
-  let { editors_name, editors, creator } = req.body;
-  // decode creator's email
-  let buff = Buffer.from(creator, "base64");
-  creator = buff.toString("utf-8");
+  let { editors_name, editors, creatorEmail, creatorNameNoDash, creatorName } = req.body;
+
   try {
-    const addEditorsToList_item = await pool.query(
-      "UPDATE list_item SET editors = $1, editors_name = $2 WHERE creator = $3",
-      [editors, editors_name, creator]
+    // encode list creator's name and email
+    const creatorEmailBuff = Buffer.from(creatorEmail, "utf8");
+    const creatorEmailEncoded = creatorEmailBuff.toString("base64");
+
+    const emailResponse = await sendInviteEmail(
+      creatorName,
+      creatorNameNoDash,
+      creatorEmailEncoded,
+      editors
     );
 
-    res.json("editor added");
+    const addEditorsToList_item = await pool.query(
+      "UPDATE list_item SET editors = $1, editors_name = $2 WHERE creator = $3",
+      [editors, editors_name, creatorEmail]
+    );
   } catch (err) {
     console.error(err.message);
   }
@@ -109,11 +117,12 @@ router.put("/invite", authorization, async (req, res) => {
   try {
     const updateUsersTable = await pool.query(
       "UPDATE users SET guests_email = $1, guests_name = $2 WHERE user_email = $3",
-      [editors, editors_name, creator]
+      [editors, editors_name, creatorEmail]
     );
   } catch (error) {
     console.error(err.message);
   }
+  res.json("editor added");
 });
 
 module.exports = router;

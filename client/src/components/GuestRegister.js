@@ -22,7 +22,7 @@ export default function GuestRegister({ setAuth }) {
   });
 
   let { guestsemail, guestsname } = useParams();
-  guestsemail = atob(guestsemail);
+  guestsemail = window.atob(guestsemail);
 
   const { email, name, password } = inputs;
 
@@ -42,16 +42,13 @@ export default function GuestRegister({ setAuth }) {
 
     try {
       const body = { email, name, password, guestsemail, guestsname };
-      const response = await fetch(
-        `/auth/guest-register/${guestsemail}/${guestsname}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      const response = await fetch(`/auth/guest-register/${guestsemail}/${guestsname}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
       const parseRes = await response.json();
 
       if (parseRes.token) {
@@ -72,10 +69,7 @@ export default function GuestRegister({ setAuth }) {
     <div style={styles}>
       <div className="container">
         <h1 className="text-center my-5">Register</h1>
-        <form
-          className="text-center justify-content-center"
-          onSubmit={handleFormSubmit}
-        >
+        <form className="text-center justify-content-center" onSubmit={handleFormSubmit}>
           <input
             className="form-control my-2 mx-auto col-xs-4 col-sm-8 col-md-5"
             type="email"

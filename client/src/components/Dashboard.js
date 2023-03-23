@@ -18,10 +18,6 @@ const styles = {
 };
 
 export default function Dashboard({ setAuth }) {
-  const EMAILJS_USER_ID = process.env.REACT_APP_USER_ID;
-  const EMAILJS_SERVICE_ID = process.env.REACT_APP_SERVICE_ID;
-  const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_TEMPLATE_ID;
-
   const [name, setName] = useState("");
   const [creatorEmail, setCreatorEmail] = useState("");
   const [allItems, setAllItems] = useState([]);
@@ -99,48 +95,35 @@ export default function Dashboard({ setAuth }) {
   const sendInviteEditorEmail = async () => {
     const { name: editors_name, email: editors } = modalInput;
 
-    let creator = btoa(creatorEmail);
-    let creatorNameNoDash = name;
-    let creatorName = joinNameWithDash(name);
+    const creatorNameNoDash = name;
+    const creatorName = joinNameWithDash(name);
 
     const emailContent = {
       creatorNameNoDash,
       creatorName,
-      creator,
+      creatorEmail,
       editors_name,
       editors,
     };
 
-    emailjs
-      .send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        emailContent,
-        EMAILJS_USER_ID
-      )
-      .then(result => {
-        console.log(result.text);
-        toast.success("Invitation email was sent.");
-        setGuestName(editors_name);
-        return emailContent;
-      })
-      .then(emailContent => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("token", localStorage.token);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("token", localStorage.token);
 
-        fetch(`/dashboard/invite`, {
-          method: "PUT",
-          headers: myHeaders,
-          body: JSON.stringify(emailContent),
-        });
-      })
-      .catch(() => {
-        toast.error(
-          "Error could not send invite email. Please double check you have the correct address."
-        );
-        setGuestName(null);
+    try {
+      await fetch(`/dashboard/invite`, {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(emailContent),
       });
+      toast.success("Invitation email was sent.");
+    } catch (error) {
+      toast.error(
+        "Error could not send invite email. Please double check you have the correct address."
+      );
+      setGuestName(null);
+      console.log(error);
+    }
   };
 
   return (
@@ -161,11 +144,7 @@ export default function Dashboard({ setAuth }) {
             logout
           </button>
         </div>
-        <InputItem
-          name={name}
-          guestName={guestName}
-          setItemWasChanged={setItemWasChanged}
-        />
+        <InputItem name={name} guestName={guestName} setItemWasChanged={setItemWasChanged} />
         <ListItem allItems={allItems} setItemWasChanged={setItemWasChanged} />
         <div
           className="modal fade"
@@ -181,12 +160,7 @@ export default function Dashboard({ setAuth }) {
                 <h5 className="modal-title" id="exampleModalLabel">
                   Share this list with:
                 </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -211,18 +185,10 @@ export default function Dashboard({ setAuth }) {
                     required
                   />
                   <input type="hidden" name="creator" value={name} />
-                  <input
-                    type="hidden"
-                    name="creatorEmail"
-                    value={creatorEmail}
-                  />
+                  <input type="hidden" name="creatorEmail" value={creatorEmail} />
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                  >
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">
                     Close
                   </button>
                   <button
